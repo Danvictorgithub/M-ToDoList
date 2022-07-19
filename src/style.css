@@ -41,13 +41,13 @@ body {
     border-top: 2px solid lightblue;
     margin: 12px 0 12px 0;
 }
-.daily-task,.weekly-task{
+.inbox,.daily-task,.weekly-task{
     padding:24px;
     display: flex;
     align-items: center;
     gap:12px;
 }
-.daily-task:hover,.weekly-task:hover {
+.inbox:hover,.daily-task:hover,.weekly-task:hover {
     background: var(--main-color);
 }
 .project-task{
