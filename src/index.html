@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8"/>
+    <link rel="icon" type="image/x-icon" href="./logo.png">
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
@@ -28,14 +29,38 @@
             </div>
             <h1>Project Task</h2>
             <div class="project-task">
-                <button type="button"><img src="./plus.png">Add New Project</button>
+                <button class="btn" type="button"><img src="./plus.png">Add New Project</button>
+            </div>
+            <div class="create-project">
+                <div>
+                    <label for="project-name">Project-Name</label>
+                    <input id="project-name" type="text">
+                </div>
+                <div class="create-project-btn">
+                    <button class="add-project" type="button">Add</button>
+                    <button class="cancel-project" type="button">Cancel</button>
+                </div>
             </div>
         </div>
         <div class="content">
             <div class="content-header">
                 <h2 class="current-tab">Inbox</h2>
             </div>
-            <button class="task-btn" type="button"><img src="./plus.png">Add Task</button>
+            <button class="task-btn btn" type="button"><img src="./plus.png">Add Task</button>
+            <div class="create-task">
+                <div class="label">
+                    <label for="name">Task Name:</label>
+                    <input id="name" type="text">
+                </div>
+                <div class="label">
+                    <label for="due">Task Due:</label>
+                    <input id="due" type="date">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="add">Add</button>
+                    <button type="button" class="cancel">Cancel</button>
+                </div>
+            </div>
         </div>
     </div>
   </body>

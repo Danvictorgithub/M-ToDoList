@@ -6,6 +6,7 @@
     box-sizing: border-box;
     font-family: Roboto, sans-serif;
     --main-color: #41B7AD;
+    --font-color:#374959;
 }
 body {
     margin: 0;
@@ -31,7 +32,7 @@ body {
 .side-bar {
     padding: 36px;
     background-color: white;
-    color:#374958; 
+    color:var(--font-color); 
 }
 .content {
     background-color: #ECECEC;
@@ -54,12 +55,74 @@ body {
     border-top: 2px solid lightblue;
     margin: 12px 0 12px 0;
 }
-button[type="button"] {
+.create-project {
+    border-radius: 8px;
+    width:90%;
+    padding:12px;
+    color: var(--font-color);
+    border: 2px solid var(--main-color);    
+    display:flex;
+    flex-direction: column;
+    gap: 12px;
+}
+label[for="project-name"]{
+    display:block;
+    text-align: center;
+    font-weight:bold;   
+    font-size: 1.4rem;
+    margin-bottom:8px;
+}
+input[id="project-name"] {
+    border:0;
+    width:97%;
+    height:30px;
+    background-color: lightgray;
+    font-size: 1.2rem;
+    font-weight:600;
+    text-align: center;
+    color:var(--font-color)74958;
+}
+.create-project-btn {
+    display:flex;
+    justify-content: center;
+    padding: 0 24px 0 24px;
+    gap:4px;
+}
+.add-project,.cancel-project {
+    color:white;
+    border-radius: 6px;
+    flex-basis: 0;
+    flex-grow: 1;
+    padding:6px;
+    font-size:1.5rem;
+    font-weight:500;
+    background-color: white;
+    border:0;
+}
+.add-project {
+    background-color: green;
+    border:2px solid transparent;
+}
+.add-project:hover {
+    color: var(--font-color);
+    background-color:white;
+    border:2px solid green;
+}
+.cancel-project {
+    background-color: red;
+    border:2px solid transparent;
+}
+.cancel-project:hover {
+    color: var(--font-color);
+    background-color:white;
+    border:2px solid red;
+}
+.btn {
     width:100%;
     padding:24px;
     font-size: 1rem;
     font-weight: 600;
-    color:#374958;
+    color: var(--font-color);
     border:0;
     background-color:white;
     display:flex;
@@ -67,7 +130,7 @@ button[type="button"] {
     align-items: center;
     gap: 12px;
 }
-button:hover {
+.btn:hover {
     background-color:var(--main-color);
 }
 .content {
@@ -95,4 +158,60 @@ button:hover {
 .task-btn:hover {
     background-color: var(--main-color);
     color:white;
+}
+.create-task {
+    border-radius: 12px;
+    margin-top:24px ;
+    padding:16px 24px 16px 24px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color:var(--font-color);
+    background-color:white;
+    display:flex;
+    align-items: center;
+}
+label[for="name"],label[for="due"] {
+    margin-right:12px;
+}
+input[id="name"],input[id="due"] {
+    margin-right:12px;
+    height: 24px;
+    width: 180px;
+}
+.label {
+    flex: 0 0 auto;
+}
+.btn-group {
+    
+    display:flex;
+    width:100%;
+    gap:6px;
+}
+.btn-group > * {
+    border-radius: 6px;
+    width:100%;
+    background-color:white;
+    border:0;
+    font-size: 1rem;
+    font-weight: 600;
+    padding:12px;
+    color:white;
+}
+.add {
+    background: green;
+    border:2px solid transparent;
+}
+.add:hover {
+    background-color:white;
+    border:2px solid green;
+    color:var(--font-color);
+}
+.cancel {
+    background-color: red;
+    border:2px solid transparent;
+}
+.cancel:hover {
+    background-color:white;
+    border:2px solid red;
+    color:var(--font-color);
 }
