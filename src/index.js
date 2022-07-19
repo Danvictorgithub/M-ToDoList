@@ -1,2 +1,8 @@
 import './style.css';
-console.log("Hello World");
+
+class task{
+    constructor(name,dueDate) {
+        this.name = name;
+        this.dueDate = dueDate;
+    }
+}
