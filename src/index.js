@@ -4,6 +4,9 @@ const addProjectbtn = document.querySelector('.btn');
 const sideBar = document.querySelector('.side-bar');
 const projectTaskNav = document.querySelector('.project-task');
 const createProjectform = document.querySelector('.create-project');
+const addTaskbtn = document.querySelector('.task-btn');
+const createTaskForm = document.querySelector(".create-task");
+
 class task{
     constructor(name,dueDate,index) {
         this.name = name;
@@ -14,6 +17,25 @@ class task{
 // main storage
 let index = [];
 
+
+
+
+
+addTaskbtn.addEventListener('click',showTaskForm);
+function showTaskForm() {
+    addTaskbtn.style.display = 'none';
+    createTaskForm.style.display = 'flex';
+}
+function hideTaskForm() {
+    addTaskbtn.style.display = 'flex';
+    createTaskForm.style.display = 'none';
+}
+(function taskDOM() {
+    const addButton = document.querySelector('.add');
+    const cancelButton = document.querySelector('.cancel');
+    
+    cancelButton.addEventListener('click', hideTaskForm);
+})();
 addProjectbtn.addEventListener('click',showAddProjectForm);
 // function showAddProjectForm() {
 //     hideAddProjectbtn();

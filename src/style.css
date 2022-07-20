@@ -81,6 +81,7 @@ input[id="project-name"] {
     font-weight:600;
     text-align: center;
     color:var(--font-color)74958;
+    margin-bottom: 12px;
 }
 .create-project-btn {
     display:flex;
@@ -167,7 +168,7 @@ input[id="project-name"] {
     font-weight: 600;
     color:var(--font-color);
     background-color:white;
-    display:flex;
+    display:none;
     align-items: center;
 }
 label[for="name"],label[for="due"] {
