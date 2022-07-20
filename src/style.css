@@ -61,7 +61,7 @@ body {
     padding:12px;
     color: var(--font-color);
     border: 2px solid var(--main-color);    
-    display:flex;
+    display:none;
     flex-direction: column;
     gap: 12px;
 }
