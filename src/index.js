@@ -7,7 +7,10 @@ const createProjectform = document.querySelector('.create-project');
 const addTaskbtn = document.querySelector('.task-btn');
 const createTaskForm = document.querySelector(".create-task");
 
-class task{
+let inputName = document.querySelector('#name');
+let inputDue = document.querySelector('#due');
+
+class taskCreate{
     constructor(name,dueDate,index) {
         this.name = name;
         this.dueDate = dueDate;
@@ -34,8 +37,16 @@ function hideTaskForm() {
     const addButton = document.querySelector('.add');
     const cancelButton = document.querySelector('.cancel');
     
+    addButton.addEventListener('click', ()=>{
+        createTask();
+    })
     cancelButton.addEventListener('click', hideTaskForm);
 })();
+function createTask() {
+    const task = new taskCreate(inputName.value,inputDue.value,index.length);
+    index.unshift(task);
+    console.log(index);
+}
 addProjectbtn.addEventListener('click',showAddProjectForm);
 // function showAddProjectForm() {
 //     hideAddProjectbtn();
