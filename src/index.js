@@ -94,7 +94,7 @@ function hideAddProjectbtn() {
 
 
 // project storage
-let projects = [];
+let projects = {};
 
 
 
