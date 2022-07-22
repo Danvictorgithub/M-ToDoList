@@ -1,16 +1,18 @@
 import './style.css';
 import x from './close-circle.png';
+(function(){})();
 // JS DOMs
 const addProjectbtn = document.querySelector('.btn');
-const sideBar = document.querySelector('.side-bar');
 const projectTaskNav = document.querySelector('.project-task');
 const createProjectform = document.querySelector('.create-project');
 const addTaskbtn = document.querySelector('.task-btn');
 const createTaskForm = document.querySelector(".create-task");
 const taskList = document.querySelector('.taskList');
+const projectList = document.querySelector('.projectList');
+const storages = document.querySelectorAll('.storage');
 let inputName = document.querySelector('#name');
 let inputDue = document.querySelector('#due');
-
+// Task Class
 class taskCreate{
     constructor(name,dueDate,index) {
         this.name = name;
@@ -20,7 +22,13 @@ class taskCreate{
 }
 // main storage
 let index = [];
-
+let indexToday = [];
+let indexWeek = []
+let storage = {'index':index,
+              'indexToday':indexToday,
+              'indexWeek':indexWeek,                
+}
+let currentStorage = 'index';
 addTaskbtn.addEventListener('click',showTaskForm);
 function showTaskForm() {
     addTaskbtn.style.display = 'none';
@@ -35,39 +43,23 @@ function hideTaskForm() {
     const cancelButton = document.querySelector('.cancel');
     
     addButton.addEventListener('click', ()=>{
-        createTask();
+        createTask(storage[currentStorage]);
     })
     cancelButton.addEventListener('click', hideTaskForm);
 })();
-function createTask() {
+function createTask(storage) {
     const task = new taskCreate(inputName.value,inputDue.value,index.length);
-    index.unshift(task);
+    storage.unshift(task);
     updateInbox();
-    console.log(index);
+    console.log(storage);
 }
-addProjectbtn.addEventListener('click',showAddProjectForm);
-function showAddProjectForm() {
-    hideAddProjectbtn();
-    createProjectform.style.display = 'flow';
-}
-function showAddProjectbtn() {
-    projectTaskNav.style.display = 'flow';
-    createProjectform.style.display = 'none';
-}
-function hideAddProjectbtn() {
-    projectTaskNav.style.display = 'none';
-}
-(function projectDOM() {
-    const addButton = document.querySelector('.add-project');
-    const cancelButton = document.querySelector('.cancel-project'); 
-    cancelButton.addEventListener('click', showAddProjectbtn);
-})();
 function updateInbox() {
     refreshIndex();
-    addInbox();
+    addInbox(storage[currentStorage]);
+    console.log(storage);
 }
-function addInbox() {
-    index.forEach( (taskIndex)=> {
+function addInbox(storage) {
+    storage.forEach( (taskIndex)=> {
         const taskContainer = document.createElement('div');
         taskContainer.classList.add('task');
         taskContainer.setAttribute('id',`${taskIndex.index}`);
@@ -96,7 +88,10 @@ function addInbox() {
                     const taskDeleteImage = document.createElement('img');
                     taskDeleteImage.src = x;
                     taskDelete.appendChild(taskDeleteImage);
-                    taskDelete.addEventListener('click', deleteTask)
+                    function deleteListener(event) {
+                        deleteTask(event,storage);
+                    }
+                    taskDelete.addEventListener('click', deleteListener);
         taskList.appendChild(taskContainer);
     });
 }
@@ -104,24 +99,38 @@ function refreshIndex() {
     while(taskList.childNodes.length != 0) {
         taskList.removeChild(taskList.lastChild);
     }
-    reAssignIndex();
+    reAssignIndex(storage[currentStorage]);
 }
-function reAssignIndex() {
+function reAssignIndex(storage) {
     let indexNo = 0;
-    index.forEach((child)=> {
+    storage.forEach((child)=> {
         child.index = indexNo;
         indexNo++;
-    })
+    });
 }
-function deleteTask(){
-    console.log(this);
-    index.splice(this.value,1);
+function deleteTask(e,storage){
+    storage.splice(e.target.parentElement.value,1);
     updateInbox();
-    console.log(index);
+    console.log(storage);
 };
 
-// project storage
-let projects = {};
+addProjectbtn.addEventListener('click',showAddProjectForm);
+function showAddProjectForm() {
+    hideAddProjectbtn();
+    createProjectform.style.display = 'flow';
+}
+function showAddProjectbtn() {
+    projectTaskNav.style.display = 'flow';
+    createProjectform.style.display = 'none';
+}
+function hideAddProjectbtn() {
+    projectTaskNav.style.display = 'none';
+}
+(function projectDOM() {
+    const addButton = document.querySelector('.add-project');
+    const cancelButton = document.querySelector('.cancel-project'); 
+    cancelButton.addEventListener('click', showAddProjectbtn);
+})();
 
 
 

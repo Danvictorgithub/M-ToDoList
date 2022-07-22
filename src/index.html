@@ -15,15 +15,15 @@
         <div class="side-bar">
             <h1>Home</h1>
             <div class="main-task">
-                <div class="inbox">
+                <div class="inbox storage" value="inbox">
                     <img src="./application.png">
                     <h2>Inbox</h2>
                 </div>
-                <div class="daily-task">
+                <div class="daily-task storage" value="indexToday">
                     <img src="./calendar-text.png">
                     <h2>Today</h2>
                 </div>
-                <div class="weekly-task">
+                <div class="weekly-task storage" value="indexWeek">
                     <img src="./calendar-text-outline.png">
                     <h2>This Week</h2>
                 </div>
@@ -31,6 +31,14 @@
             <h1>Project Task</h2>
             <div class="project-task">
                 <button class="btn" type="button"><img src="./plus.png">Add New Project</button>
+            </div>
+            <div class="projectList">
+                <!-- <div class="project">
+                    <h3>Project 1</h3>
+                    <button class="remove-project">
+                        <img src="./close-circle.png">
+                    </button>
+                </div> -->
             </div>
             <div class="create-project">
                 <div>
@@ -64,16 +72,6 @@
                 </div>
             </div>
             <div class="taskList"></div>
-            <!-- <div class="task">
-                <div class="task-name">
-                    <input id="task-check" type="checkbox">
-                    <h3>Task Sample</h3>
-                </div>
-                <div class="task-date">
-                    <h3>Task Date</h3>
-                    <button class="task-delete"><img src="./close-circle.png"></button>
-                </div>
-            </div> -->
         </div>
     </div>
   </body>
