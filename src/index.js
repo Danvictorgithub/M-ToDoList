@@ -96,6 +96,7 @@ function addInbox() {
                     const taskDeleteImage = document.createElement('img');
                     taskDeleteImage.src = x;
                     taskDelete.appendChild(taskDeleteImage);
+                    taskDelete.addEventListener('click', deleteTask)
         taskList.appendChild(taskContainer);
     });
 }
@@ -103,7 +104,21 @@ function refreshIndex() {
     while(taskList.childNodes.length != 0) {
         taskList.removeChild(taskList.lastChild);
     }
+    reAssignIndex();
 }
+function reAssignIndex() {
+    let indexNo = 0;
+    index.forEach((child)=> {
+        child.index = indexNo;
+        indexNo++;
+    })
+}
+function deleteTask(){
+    console.log(this);
+    index.splice(this.value,1);
+    updateInbox();
+    console.log(index);
+};
 
 // project storage
 let projects = {};
