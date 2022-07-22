@@ -63,6 +63,10 @@ function hideAddProjectbtn() {
     cancelButton.addEventListener('click', showAddProjectbtn);
 })();
 function updateInbox() {
+    refreshIndex();
+    addInbox();
+}
+function addInbox() {
     index.forEach( (taskIndex)=> {
         const taskContainer = document.createElement('div');
         taskContainer.classList.add('task');
@@ -95,8 +99,11 @@ function updateInbox() {
         taskList.appendChild(taskContainer);
     });
 }
-
-
+function refreshIndex() {
+    while(taskList.childNodes.length != 0) {
+        taskList.removeChild(taskList.lastChild);
+    }
+}
 
 // project storage
 let projects = {};
