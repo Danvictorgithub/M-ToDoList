@@ -216,3 +216,15 @@ input[id="name"],input[id="due"] {
     border:2px solid red;
     color:var(--font-color);
 }
+.task {
+    border-radius: 10px;
+    margin-top:10px;
+    background-color: white;
+    display:flex;
+    justify-content: space-between;
+    padding:12px 24px 12px 24px;
+}
+.task-name,.task-date {
+    display:flex;
+    gap:12px;
+}
