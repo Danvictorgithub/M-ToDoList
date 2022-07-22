@@ -223,8 +223,14 @@ input[id="name"],input[id="due"] {
     display:flex;
     justify-content: space-between;
     padding:12px 24px 12px 24px;
+    color:var(--font-color);
 }
 .task-name,.task-date {
     display:flex;
     gap:12px;
+}
+.task-delete {
+    background-color:white;
+    padding:0;
+    border:0;
 }
