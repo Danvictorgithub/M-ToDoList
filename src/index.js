@@ -1,6 +1,7 @@
 import './style.css';
 import x from './close-circle.png';
 import isToday from 'date-fns/isToday';
+import isPast from 'date-fns/isPast';
 (function(){})();
 // JS DOMs
 const addProjectbtn = document.querySelector('.btn');
@@ -57,7 +58,6 @@ function hideTaskForm() {
         child.addEventListener('click',changeStorage);
     });
 })();
-
 function hidetaskbtn() {
     addTaskbtn.style.display = 'none';
 }
@@ -90,6 +90,7 @@ function createTask(storage) {
     const task = new taskCreate(inputName.value,inputDue.value,index.length);
     storage.unshift(task);
     updateToday();
+    updateWeek();
     updateInbox(storage);
 }
 console.log('hi');
@@ -101,11 +102,19 @@ function updateToday() {
         console.log(object.dueDate);
         if (isToday(new Date(object.dueDate))) {
             indexToday.unshift(object);
-        }
-            
+        }   
     });
 }
 function updateWeek() {
+    indexWeek.forEach( (object) => {
+        indexWeek.pop();
+    });
+    index.forEach( (object) => {
+        console.log(object.dueDate);
+        if ( (!(isToday(new Date(object.dueDate)))) && (!(isPast(new Date(object.dueDate)))) ) {
+            indexWeek.unshift(object);
+        }   
+    });
 }
 // Checks taskList and updates based on Storage or Changes/Deletion
 function updateInbox(storage) {
@@ -149,7 +158,6 @@ function addInbox(storage) {
                     
                     taskDelete.addEventListener('click', deleteListener);
                 }
-                
         taskList.appendChild(taskContainer);
     });
 }
@@ -169,6 +177,8 @@ function reAssignIndex() {
 function deleteTask(e,storage){
     storage.splice(e.target.parentElement.value,1);
     updateInbox(storage);
+    updateToday();
+    updateWeek();
     console.log(storage);
 };
 // Project SHOW/HIDE Functions
