@@ -21,14 +21,19 @@ class taskCreate{
     }
 }
 // main storage
+// let index = ['index'];
+// let indexToday = ['today'];
+// let indexWeek = ['week'];
 let index = [];
 let indexToday = [];
-let indexWeek = []
+let indexWeek = [];
 let storage = {'index':index,
               'indexToday':indexToday,
-              'indexWeek':indexWeek,                
+              'indexWeek':indexWeek,              
 }
+// Storage Manipulation
 let currentStorage = 'index';
+// Task Button SHOW/HIDE Functions
 addTaskbtn.addEventListener('click',showTaskForm);
 function showTaskForm() {
     addTaskbtn.style.display = 'none';
@@ -38,27 +43,46 @@ function hideTaskForm() {
     addTaskbtn.style.display = 'flex';
     createTaskForm.style.display = 'none';
 }
-(function taskDOM() {
+(function refreshStorage() {
+    storages.forEach((child) => {
+        child.addEventListener('click',changeStorage);
+    });
+})();
+function changeStorage() {
+    currentStorage = `${this.getAttribute('value')}`;
+    console.log(storage);
+    const addButton = document.querySelector('.add');
+    addButton.removeEventListener('click', createTaskHandler);
+    taskDOM();
+    updateInbox(storage[currentStorage]);
+}
+// Task Creation Functions
+function taskDOM() {
     const addButton = document.querySelector('.add');
     const cancelButton = document.querySelector('.cancel');
-    
-    addButton.addEventListener('click', ()=>{
-        createTask(storage[currentStorage]);
-    })
+    addButton.addEventListener('click', createTaskHandler);
     cancelButton.addEventListener('click', hideTaskForm);
-})();
+}
+function createTaskHandler() {
+    createTask(storage[currentStorage]);
+}
+taskDOM();
+// storage is object
+// Initialize task and assigns it to respective storage
 function createTask(storage) {
     const task = new taskCreate(inputName.value,inputDue.value,index.length);
     storage.unshift(task);
-    updateInbox();
-    console.log(storage);
+    updateInbox(storage);
 }
-function updateInbox() {
-    refreshIndex();
-    addInbox(storage[currentStorage]);
-    console.log(storage);
+// Checks taskList and updates based on Storage or Changes/Deletion
+function updateInbox(storage) {
+    refreshIndex(storage);
+    addInbox(storage);
 }
 function addInbox(storage) {
+    function deleteListener(event) {
+        deleteTask(event,storage);
+    }
     storage.forEach( (taskIndex)=> {
         const taskContainer = document.createElement('div');
         taskContainer.classList.add('task');
@@ -88,9 +112,7 @@ function addInbox(storage) {
                     const taskDeleteImage = document.createElement('img');
                     taskDeleteImage.src = x;
                     taskDelete.appendChild(taskDeleteImage);
-                    function deleteListener(event) {
-                        deleteTask(event,storage);
-                    }
+                    
                     taskDelete.addEventListener('click', deleteListener);
         taskList.appendChild(taskContainer);
     });
@@ -99,11 +121,11 @@ function refreshIndex() {
     while(taskList.childNodes.length != 0) {
         taskList.removeChild(taskList.lastChild);
     }
-    reAssignIndex(storage[currentStorage]);
+    reAssignIndex();
 }
-function reAssignIndex(storage) {
+function reAssignIndex() {
     let indexNo = 0;
-    storage.forEach((child)=> {
+    storage[currentStorage].forEach((child)=> {
         child.index = indexNo;
         indexNo++;
     });
@@ -113,7 +135,7 @@ function deleteTask(e,storage){
     updateInbox();
     console.log(storage);
 };
-
+// Project SHOW/HIDE Functions
 addProjectbtn.addEventListener('click',showAddProjectForm);
 function showAddProjectForm() {
     hideAddProjectbtn();
