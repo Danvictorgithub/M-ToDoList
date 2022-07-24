@@ -11,7 +11,8 @@ const addTaskbtn = document.querySelector('.task-btn');
 const createTaskForm = document.querySelector(".create-task");
 const taskList = document.querySelector('.taskList');
 const projectList = document.querySelector('.projectList');
-const storages = document.querySelectorAll('.storage');
+let projectName = document.querySelector('#project-name');
+
 let inputName = document.querySelector('#name');
 let inputDue = document.querySelector('#due');
 // Task Class
@@ -53,22 +54,26 @@ function hideTaskForm() {
     addTaskbtn.style.display = 'flex';
     createTaskForm.style.display = 'none';
 }
-(function refreshStorage() {
+function refreshStorage() {
+    const storages = document.querySelectorAll('.storage');
     storages.forEach((child) => {
         child.addEventListener('click',changeStorage);
     });
-})();
+};
+refreshStorage();
 function hidetaskbtn() {
     addTaskbtn.style.display = 'none';
 }
 function showTaskbtn() {
     addTaskbtn.style.display = 'flex';
 }
+// changeStorage based on Selected div
 function changeStorage() {
     currentStorage = `${this.getAttribute('value')}`;
     console.log(storage);
     const addButton = document.querySelector('.add');
     addButton.removeEventListener('click', createTaskHandler);
+    createTaskForm.style.display = 'none';
     taskDOM();
     updateInbox(storage[currentStorage]);
     taskbtnToggle();
@@ -93,7 +98,6 @@ function createTask(storage) {
     updateWeek();
     updateInbox(storage);
 }
-console.log('hi');
 function updateToday() {
     indexToday.forEach( (object) => {
         indexToday.pop();
@@ -122,7 +126,6 @@ function updateInbox(storage) {
     addInbox(storage);
 }
 function addInbox(storage) {
-    console.log(storage)
     function deleteListener(event) {
         deleteTask(event,storage);
     }
@@ -198,7 +201,38 @@ function hideAddProjectbtn() {
     const addButton = document.querySelector('.add-project');
     const cancelButton = document.querySelector('.cancel-project'); 
     cancelButton.addEventListener('click', showAddProjectbtn);
+    addButton.addEventListener('click', addProjectObject);
 })();
+let projectCounter = 0;
+function addProjectObject() {
+    if (!(projectName.value in storage)) {
+        storage[projectName.value] = [];
+        projectCounter++;
+        console.log(Object.keys(storage)[2+projectCounter]);
+        updateProjectList();
+    }
+}
+function updateProjectList() {
+    const projectNodes = Object.keys(storage).slice(3,3+projectCounter);
+    console.log(projectNodes);
+    projectNodes.forEach( (project) => {
+        const projectContainer = document.createElement('div');
+        projectContainer.classList.add('project');
+        projectContainer.classList.add('storage');
+        projectContainer.setAttribute('value',`${project}`);
+        const projectHeaderName = document.createElement('h3');
+        projectHeaderName.textContent = `${project}`;
+        projectContainer.appendChild(projectHeaderName);
 
+        const projectRemoveButton = document.createElement('button');
+        projectRemoveButton.classList.add('remove-project');
+        const projectRemoveButtonImage = document.createElement('img');
+        projectRemoveButtonImage.src = x;
+        projectRemoveButton.appendChild(projectRemoveButtonImage);
+        projectContainer.appendChild(projectRemoveButton);
+    projectList.appendChild(projectContainer);
+    });
+    refreshStorage();
+}
 
 
