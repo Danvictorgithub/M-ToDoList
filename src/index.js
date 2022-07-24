@@ -1,5 +1,6 @@
 import './style.css';
 import x from './close-circle.png';
+import isToday from 'date-fns/isToday';
 (function(){})();
 // JS DOMs
 const addProjectbtn = document.querySelector('.btn');
@@ -35,6 +36,14 @@ let storage = {'index':index,
 let currentStorage = 'index';
 // Task Button SHOW/HIDE Functions
 addTaskbtn.addEventListener('click',showTaskForm);
+function taskbtnToggle() {
+    if (currentStorage == 'indexToday' || currentStorage == 'indexWeek'){
+        hidetaskbtn();
+        createTaskForm.style.display = 'none';
+    } else {
+        showTaskbtn();
+    }
+}
 function showTaskForm() {
     addTaskbtn.style.display = 'none';
     createTaskForm.style.display = 'flex';
@@ -48,6 +57,13 @@ function hideTaskForm() {
         child.addEventListener('click',changeStorage);
     });
 })();
+
+function hidetaskbtn() {
+    addTaskbtn.style.display = 'none';
+}
+function showTaskbtn() {
+    addTaskbtn.style.display = 'flex';
+}
 function changeStorage() {
     currentStorage = `${this.getAttribute('value')}`;
     console.log(storage);
@@ -55,6 +71,7 @@ function changeStorage() {
     addButton.removeEventListener('click', createTaskHandler);
     taskDOM();
     updateInbox(storage[currentStorage]);
+    taskbtnToggle();
 }
 // Task Creation Functions
 function taskDOM() {
@@ -72,7 +89,23 @@ taskDOM();
 function createTask(storage) {
     const task = new taskCreate(inputName.value,inputDue.value,index.length);
     storage.unshift(task);
+    updateToday();
     updateInbox(storage);
+}
+console.log('hi');
+function updateToday() {
+    indexToday.forEach( (object) => {
+        indexToday.pop();
+    });
+    index.forEach( (object) => {
+        console.log(object.dueDate);
+        if (isToday(new Date(object.dueDate))) {
+            indexToday.unshift(object);
+        }
+            
+    });
+}
+function updateWeek() {
 }
 // Checks taskList and updates based on Storage or Changes/Deletion
 function updateInbox(storage) {
@@ -80,6 +113,7 @@ function updateInbox(storage) {
     addInbox(storage);
 }
 function addInbox(storage) {
+    console.log(storage)
     function deleteListener(event) {
         deleteTask(event,storage);
     }
@@ -104,16 +138,18 @@ function addInbox(storage) {
                 const taskDue = document.createElement('h3');
                 taskDue.textContent = `${taskIndex.dueDate}`;
                 taskDueContainer.appendChild(taskDue);
-
-                const taskDelete = document.createElement('button');
-                taskDelete.classList.add('task-delete');
-                taskDelete.setAttribute('value',`${taskIndex.index}`);
-                taskDueContainer.appendChild(taskDelete);
+                if (!(currentStorage == 'indexToday' || currentStorage == 'indexWeek')){
+                    const taskDelete = document.createElement('button');
+                    taskDelete.classList.add('task-delete');
+                    taskDelete.setAttribute('value',`${taskIndex.index}`);
+                    taskDueContainer.appendChild(taskDelete);
                     const taskDeleteImage = document.createElement('img');
                     taskDeleteImage.src = x;
                     taskDelete.appendChild(taskDeleteImage);
                     
                     taskDelete.addEventListener('click', deleteListener);
+                }
+                
         taskList.appendChild(taskContainer);
     });
 }
@@ -132,7 +168,7 @@ function reAssignIndex() {
 }
 function deleteTask(e,storage){
     storage.splice(e.target.parentElement.value,1);
-    updateInbox();
+    updateInbox(storage);
     console.log(storage);
 };
 // Project SHOW/HIDE Functions
