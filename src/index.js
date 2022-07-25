@@ -11,10 +11,12 @@ const addTaskbtn = document.querySelector('.task-btn');
 const createTaskForm = document.querySelector(".create-task");
 const taskList = document.querySelector('.taskList');
 const projectList = document.querySelector('.projectList');
+let currentTabHeader = document.querySelector('.current-tab');
 let projectName = document.querySelector('#project-name');
 
 let inputName = document.querySelector('#name');
 let inputDue = document.querySelector('#due');
+let projectCounter = 0;
 // Task Class
 class taskCreate{
     constructor(name,dueDate,index) {
@@ -36,6 +38,34 @@ let storage = {'index':index,
 }
 // Storage Manipulation
 let currentStorage = 'index';
+function currentTab() {
+    currentTabHeader.textContent = `${currentStorage}`;
+}
+(function getLocalStorage() {
+    if (localStorage.length != 0) {
+        for (let store in storage) delete storage[store];
+        let parsedlocalStorage = {};
+        for (let i=0;i < localStorage.length;i++) {
+            let key = localStorage.key(i);
+            let value = JSON.parse(localStorage[localStorage.key(i)]);
+            parsedlocalStorage[key] = value;
+    }
+        let sortedStorage = {'index':parsedlocalStorage['index'],
+                         'indexToday':parsedlocalStorage['indexToday'],
+                         'indexWeek':parsedlocalStorage['indexWeek']                 
+                        }
+        delete parsedlocalStorage['index'];
+        delete parsedlocalStorage['indexWeek'];
+        delete parsedlocalStorage['indexToday'];
+        projectCounter += Object.keys(parsedlocalStorage).length;
+        console.log(projectCounter);
+        let finalStorage = Object.assign({},sortedStorage,parsedlocalStorage);
+        storage = finalStorage;
+        console.log('Local Storage is not Empty');
+    } else {
+        console.log('Local Storage is Empty');
+    }
+})();
 // Task Button SHOW/HIDE Functions
 addTaskbtn.addEventListener('click',showTaskForm);
 function taskbtnToggle() {
@@ -77,7 +107,9 @@ function changeStorage() {
     taskDOM();
     updateInbox(storage[currentStorage]);
     taskbtnToggle();
+    currentTab();
 }
+updateInbox(storage[currentStorage]);
 // Task Creation Functions
 function taskDOM() {
     const addButton = document.querySelector('.add');
@@ -97,6 +129,7 @@ function createTask(storage) {
     updateToday();
     updateWeek();
     updateInbox(storage);
+    updateLocalStorage();
 }
 function updateToday() {
     indexToday.forEach( (object) => {
@@ -179,9 +212,11 @@ function reAssignIndex() {
 }
 function deleteTask(e,storage){
     storage.splice(e.target.parentElement.value,1);
+    projectCounter--;
     updateInbox(storage);
     updateToday();
     updateWeek();
+    updateLocalStorage();
     console.log(storage);
 };
 // Project SHOW/HIDE Functions
@@ -197,22 +232,30 @@ function showAddProjectbtn() {
 function hideAddProjectbtn() {
     projectTaskNav.style.display = 'none';
 }
-(function projectDOM() {
+function projectDOM() {
     const addButton = document.querySelector('.add-project');
     const cancelButton = document.querySelector('.cancel-project'); 
     cancelButton.addEventListener('click', showAddProjectbtn);
     addButton.addEventListener('click', addProjectObject);
-})();
-let projectCounter = 0;
+};
+projectDOM();
+
 function addProjectObject() {
     if (!(projectName.value in storage)) {
         storage[projectName.value] = [];
         projectCounter++;
         console.log(Object.keys(storage)[2+projectCounter]);
         updateProjectList();
+        updateLocalStorage();
+    }
+}
+function refreshProjectList() {
+    while(projectList.childNodes.length != 0) {
+        projectList.removeChild(projectList.lastChild);
     }
 }
 function updateProjectList() {
+    refreshProjectList();
     const projectNodes = Object.keys(storage).slice(3,3+projectCounter);
     console.log(projectNodes);
     projectNodes.forEach( (project) => {
@@ -230,9 +273,52 @@ function updateProjectList() {
         projectRemoveButtonImage.src = x;
         projectRemoveButton.appendChild(projectRemoveButtonImage);
         projectContainer.appendChild(projectRemoveButton);
+        projectRemoveButton.addEventListener('click',deleteProject);
     projectList.appendChild(projectContainer);
     });
     refreshStorage();
+    updateLocalStorage();
 }
-
-
+function deleteProject(e) {
+    delete storage[this.parentElement.getAttribute('value')];
+    console.log(this.parentElement.getAttribute('value'));
+    currentStorage = 'index';
+    updateProjectList();
+    updateLocalStorage();
+    e.stopPropagation();   
+}
+updateProjectList();
+// Check if local storage is available
+// type is JSON/Object
+function storageAvailable(type) {
+    let storage;
+    try {
+        storage = window[type];
+        const x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
+function updateLocalStorage() {
+    localStorage.clear();
+    const storageArray = Object.keys(storage);
+    storageArray.forEach( (storageName) => {
+        localStorage.setItem(storageName,JSON.stringify(storage[storageName]));
+    })
+    
+}
