@@ -11,6 +11,7 @@ const addTaskbtn = document.querySelector('.task-btn');
 const createTaskForm = document.querySelector(".create-task");
 const taskList = document.querySelector('.taskList');
 const projectList = document.querySelector('.projectList');
+let currentTabHeader = document.querySelector('.current-tab');
 let projectName = document.querySelector('#project-name');
 
 let inputName = document.querySelector('#name');
@@ -37,6 +38,9 @@ let storage = {'index':index,
 }
 // Storage Manipulation
 let currentStorage = 'index';
+function currentTab() {
+    currentTabHeader.textContent = `${currentStorage}`;
+}
 (function getLocalStorage() {
     if (localStorage.length != 0) {
         for (let store in storage) delete storage[store];
@@ -103,6 +107,7 @@ function changeStorage() {
     taskDOM();
     updateInbox(storage[currentStorage]);
     taskbtnToggle();
+    currentTab();
 }
 updateInbox(storage[currentStorage]);
 // Task Creation Functions
